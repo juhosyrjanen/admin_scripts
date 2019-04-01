@@ -8,6 +8,7 @@
     export DB_PASSWD=testi123
     export MYSQL=mysql
     export MYSQLDUMP=mysqldump
+    export DATE=`date +”%d%b”`
 
     echo "“mySQL_backup"
     echo "———————-"
@@ -28,7 +29,7 @@
 
     #tehdään loki ja tallennetaan temppiin
     echo "* Creating new backup…"
-    echo "Backup done! `date`" > /tmp/mysqldump.log
+    echo "Backup done! $(DATE)" > /tmp/mysqldump.log
 
     #Jos halutaan maililla raportti.. 
     # mail -s “mysqldump report” haluttu@mailiosote.com < /tmp/my_report.log
