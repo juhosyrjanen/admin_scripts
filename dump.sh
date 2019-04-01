@@ -22,7 +22,7 @@
     #tehdään uusi dumppi // kannan kannattaa olla melko pieni tätä varten. Ajaa kaikki databaset erillisiin zippeihin
     cd $DB_BACKUP/01
     $MYSQL -u $DB_USER --password=$DB_PASSWD -Bse "show databases" |while read m; \
-    do $MYSQLDUMP --single-transaction -u $DB_USER --password=$DB_PASSWD `echo $m` > `echo $m`.sql;done
+    do $MYSQLDUMP --single-transaction -u $DB_USER --password=$DB_PASSWD $m > $m.sql;done
     #voi myös käyttää zippiä, mutta tämä ilmeisesti nopeampi
     bzip2 *sql
 
