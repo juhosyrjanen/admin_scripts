@@ -1,5 +1,5 @@
  #!/bin/bash
-    #cronia varten mysqldump skripti
+    #myslqdump script for cron.daily
 
     # modaa setuppia varten // tee oma käyttäjä backuppia varten ja anna oikeudet haluttuihin kantoihin. Ei kannata ajaa roottina
     # variablet mysql loginia varten
@@ -14,8 +14,8 @@
     #rotate vanhat lokit pois, vanhin menemään ja sitten uudemmat vanhemman päälle
     echo "* Rotating backups…"
     rm -rf $DB_BACKUP/04
-    mv $DB_BACKUP/03 $DB_BACKUP/04
-    mv $DB_BACKUP/02 $DB_BACKUP/03
+    mv $DB_BACKUP/03 $DB_BACKUP/04 2>/dev/null
+    mv $DB_BACKUP/02 $DB_BACKUP/03 2>/dev/null
     mv $DB_BACKUP/01 $DB_BACKUP/02
     mkdir $DB_BACKUP/01
 
