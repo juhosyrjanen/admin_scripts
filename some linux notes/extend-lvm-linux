@@ -7,14 +7,14 @@ Filesystem                    Size  Used Avail Use% Mounted on
 
 #Extend vdisk on host
 #Tell OS the disk has been altered
-echo "1" > /sys/block/sb*/device/rescan #* = your device 
+[root@share ~]# echo "1" > /sys/block/sb*/device/rescan #* = your device 
 
 #Check that the OS knows what's up / This command lists 5 last lines of kernel buffer - 
 # look for -> sda: detected capacity change from n to n 
-dmesg | tail -5
+[root@share ~]# dmesg | tail -5
 
 #create a new partition to the disk
-fdisk /dev/sd* #replace * with the device that's being extended
+[root@share ~]# fdisk /dev/sd* #replace * with the device that's being extended
     
     #print partition table 
     Command (m for help): p
