@@ -1,0 +1,83 @@
+#Extending LVM on Linux filesystems 
+
+#Expanding the root volume group
+[root@share ~]# df -h
+Filesystem                    Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root       4.7G  1.6G  3.1G  34% /
+
+#Extend vdisk on host
+#Tell OS the disk has been altered
+echo "1" > /sys/block/sb*/device/rescan #* = your device 
+
+#Check that the OS knows what's up / This command lists 5 last lines of kernel buffer - 
+# look for -> sda: detected capacity change from n to n 
+dmesg | tail -5
+
+#create a new partition to the disk
+fdisk /dev/sd* #replace * with the device that's being extended
+    
+    #print partition table 
+    Command (m for help): p
+
+    Device Boot      Start         End      Blocks   Id  System
+    /dev/sda1   *        2048      976895      487424   83  Linux
+    /dev/sda2          976896   157286399    78154752   8e  Linux LVM
+
+
+    #create a new partition 
+    Command (m for help): n
+    Partition type:
+    p   primary (2 primary, 0 extended, 2 free)
+    e   extended
+    Select (default p): p #select primary
+    Partition number (3,4, default 3): 3 #use free spot
+    First sector (157286400-167772159, default 157286400): #see the partitioning table, first sector should be 1 more than the /dev/sda2 end, default will do in example, be careful here.
+    Last sector, +sectors or +size{K,M,G} (157286400-167772159, default 167772159): #use default here, unless you want to split the space to several partitions
+   
+    #confirm changes in partitioning table:
+    Command (m for help): p
+    Device Boot      Start         End      Blocks   Id  System
+    /dev/sda1   *        2048      976895      487424   83  Linux
+    /dev/sda2          976896   157286399    78154752   8e  Linux LVM
+    /dev/sda3       157286400   167772159     5242880   83  Linux #see system, if not same as /dev/sda2, use l to list partition types and t to set type.
+
+    Command (m for help): t
+    Partition number (1-3, default 3): 3
+    Hex code (type L to list all codes): 8e #8e for Linux LVM
+    Changed type of partition 'Linux' to 'Linux LVM'
+
+    #write changes to disk
+    Command (m for help): w
+    The partition table has been altered!
+
+#You will see a message prompting for reboot, ignore that and use a command instead
+[root@localhost ~]# partx -a /dev/sda 
+# this error will pop up: partx: /dev/sda: error adding partitions 1-2, it's normal no problem.
+
+#use vgs command to see what LVM name and specs
+[root@localhost ~]# vgs
+  VG     #PV #LV #SN Attr   VSize  VFree
+  centos   1   3   0 wz--n- 74.53g    0
+
+#next add the new partition to the volume group
+[root@localhost ~]# vgextend centos /dev/sda3
+  Physical volume "/dev/sda3" successfully created.
+  Volume group "centos" successfully extended
+
+#next extend the volume group with the new partition
+[root@slocalhost ~]# lvextend -l +100%FREE /dev/centos/root
+  Size of logical volume centos/root changed from <4.66 GiB (1192 extents) to 9.65 GiB (2471 extents).
+  Logical volume centos/root successfully resized.
+
+// you might need to use different command here depending on the filesystem, xfs_growfs works on xfs-filesystem
+// use command <df -Th | grep "^/dev"> to check filesys 
+// if your filesystem is ext-filesystem, use resize2fs /dev/centos/root instead of xfs_growfs.
+
+#next tell the OS you have altered partitions and resize the filesystem
+[root@localhost ~]# xfs_growfs /dev/centos/root  
+data blocks changed from 1220608 to 2530304
+
+#run df -h to see if LVM is successfully expanded
+[root@localhost ~]# df -h
+Filesystem                    Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root       9.7G  1.6G  8.1G  17% /
