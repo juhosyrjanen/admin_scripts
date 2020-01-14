@@ -10,7 +10,7 @@
     export MYSQLDUMP=mysqldump
     export DATE=`date +”%d%b”`
 
-    echo "“mySQL_backup"
+    echo "“MySQL_backup"
     echo "———————-"
     #rotate vanhat lokit pois, vanhin menemään ja sitten uudemmat vanhemman päälle
     echo "* Rotating backups…"
@@ -20,7 +20,7 @@
     mv $DB_BACKUP/01 $DB_BACKUP/02
     mkdir $DB_BACKUP/01
 
-    #tehdään uusi dumppi // kannan kannattaa olla melko pieni tätä varten. Ajaa kaikki databaset erillisiin zippeihin
+    #tehdään uusi dumppi // Ajaa kaikki databaset erillisiin zippeihin
     cd $DB_BACKUP/01
     $MYSQL -u $DB_USER --password=$DB_PASSWD -Bse "show databases" |while read m; \
     do $MYSQLDUMP --single-transaction -u $DB_USER --password=$DB_PASSWD $m > $m.sql;done
