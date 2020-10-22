@@ -20,7 +20,7 @@ do
   pg_dump $d | gzip -c >  $DIR/$d.$DATE.sql.gz
 done
 
-#log rotate                                                                              
+#backup rotate                                                                              
 for del in $(find /var/db_backup -name '*.sql.gz' -mmin +3000)
 do
 echo This directory is more than one day old and it is being removed: $del
