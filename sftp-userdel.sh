@@ -1,7 +1,7 @@
 #!/bin/bash
 #juho@syrjanen.org
 
-logfile="/var/log/valtti-sftp.log"
+logfile="/var/log/sftp.log"
 timestamp=`date "+%Y-%m-%d %H:%M:%S"`
 
 #Root check
@@ -16,7 +16,7 @@ green=`tput setaf 2`
 reset=`tput sgr0`
 
 ## Set username variable
-echo -e "--- ${green}Valtti ${reset}SFTP service ---"
+echo -e "--- ${green}SFTP ${reset} service ---"
 echo -e "This script will delete SFTP user and all its files."
 echo
 echo -e "Enter new SFTP user's username and press [ENTER] or to exit without changes press CTRL+C"
