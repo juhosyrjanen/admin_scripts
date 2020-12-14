@@ -22,7 +22,6 @@ echo
 
 if id "$username" &>/dev/null; then
     echo 'User '$username' found.'
-
 else
     echo 'User '$username' not found! Exiting..'
     exit
@@ -31,7 +30,7 @@ fi
 echo -e 
 
 while true; do
-    read -p "Delete user "$username" and all its files? ${red}THIS IS A PERMANENT DELETION! ${reset}[yes/no]? " yn
+    read -p "Delete user "$username" and all its files? ${red}THIS IS A PERMANENT ACTION! ${reset}[yes/no]? " yn
     case $yn in
         [Yy]* ) userdel $username && rm -rf /sftp/$username ; break;;
         [Nn]* ) exit;;
