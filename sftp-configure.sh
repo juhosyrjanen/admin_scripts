@@ -4,6 +4,7 @@
 logfile="/var/log/valtti-sftp.log"
 timestamp=`date "+%Y-%m-%d %H:%M:%S"`
 sshconf=/etc/ssh/sshd_config
+conf=/sftp/%u
 
 #Root check
 if ! [ $(id -u) = 0 ]; then
@@ -15,7 +16,7 @@ echo "This script will configure server to use Valtti SFTP service."
 echo -e
 echo "Checking if configuration is already in place..."
 
-if grep -q ChrootDirectory "$sshconf"; then
+if grep -q "$conf" "$sshconf"; then
   echo "Configuration is in place or similar exists. Exiting."
   exit
 else 
