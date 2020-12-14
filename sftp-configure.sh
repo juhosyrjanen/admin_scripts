@@ -6,6 +6,8 @@ timestamp=`date "+%Y-%m-%d %H:%M:%S"`
 sshconf=/etc/ssh/sshd_config
 conf=sftpuser
 green=`tput setaf 2`
+reset=`tput sgr0`
+
 
 
 #Root check
@@ -24,6 +26,11 @@ if grep -q "$conf" "$sshconf"; then
 else 
   echo "No existing configuration detected. Resuming.."
 fi
+
+echo -e "Creating backup of sshd_config."
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+echo "To revert configuration run following command manually: cp /etc/ssh/sshd_confif.bak /etc/ssh/sshd_config"
+echo -e
 
 #Remove default sftp conf
 sed -i '/Subsystem/d' /etc/ssh/sshd_config
@@ -51,7 +58,9 @@ systemctl restart sshd
 
 #print success message :)
 echo "======="
-echo "$green{SFTP service configured.}"
+echo "${green}SFTP service configured. ${reset}"
+echo "Use useradd script to confirm configuration."
+echo -e
 echo "======="
 
 #logging action
