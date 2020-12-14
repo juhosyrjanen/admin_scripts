@@ -16,7 +16,7 @@ if ! [ $(id -u) = 0 ]; then
    exit 1
 fi
 
-echo "This script will configure server to use Valtti SFTP service. Use for new servers only!"
+echo "This script will configure server to use SFTP service. Use for new servers only!"
 echo -e
 echo "Checking if configuration is already in place..."
 
