@@ -28,7 +28,7 @@ fi
 sed -i '/Subsystem/d' /etc/ssh/sshd_config
 
 ##Create standard SFTP service configuration in sshd.conf
-cat <<EOF >> /etc/ssh/sshd_confog
+cat <<EOF >> /etc/ssh/sshd_config
 Subsystem   sftp    internal-sftp 
     Match Group sftpuser 
     ForceCommand internal-sftp 
