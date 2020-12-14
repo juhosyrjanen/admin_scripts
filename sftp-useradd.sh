@@ -1,6 +1,9 @@
 #!/bin/bash
 #juho@syrjanen.org
 
+logfile="/var/log/sftp.log"
+timestamp=`date "+%Y-%m-%d %H:%M:%S"`
+
 #Root check
 if ! [ $(id -u) = 0 ]; then
    echo "Please run as sudo."
@@ -13,7 +16,7 @@ green=`tput setaf 2`
 reset=`tput sgr0`
 
 ## Set username variable
-echo -e "--- ${green}Valtti ${reset}SFTP service ---"
+echo -e "--- ${green}SFTP ${reset}service ---"
 echo -e "This script will create an SFTP user for new SFTP client."
 echo
 echo -e "Enter new SFTP client username and press [ENTER] or to exit without changes press CTRL+C"
@@ -55,4 +58,11 @@ done
 
 echo "SFTP read-only user "$username "has been created with the following password:" $pw
 echo
+
+#logging action
+touch $logfile
+id=$(whoami) 
+echo "$timestamp useradd script run by $id." >> $logfile
+echo "Added user $username." >> $logfile
+
 sleep 2
