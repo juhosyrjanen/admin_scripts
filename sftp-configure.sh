@@ -5,6 +5,8 @@ logfile="/var/log/valtti-sftp.log"
 timestamp=`date "+%Y-%m-%d %H:%M:%S"`
 sshconf=/etc/ssh/sshd_config
 conf=sftpuser
+green=`tput setaf 2`
+
 
 #Root check
 if ! [ $(id -u) = 0 ]; then
@@ -12,14 +14,13 @@ if ! [ $(id -u) = 0 ]; then
    exit 1
 fi
 
-echo "This script will configure server to use Valtti SFTP service."
+echo "This script will configure server to use Valtti SFTP service. Use for new servers only!"
 echo -e
 echo "Checking if configuration is already in place..."
 
-#simple check if stpuser group already set in sshd_config
 if grep -q "$conf" "$sshconf"; then
   echo "Configuration is in place or similar exists. Exiting."
-  exit
+  exit 1
 else 
   echo "No existing configuration detected. Resuming.."
 fi
@@ -44,4 +45,17 @@ chmod 755 /sftp
 
 #Create SFTP group
 groupadd sftpuser
+
+#Restarting SSH
+systemctl restart sshd
+
+#print success message :)
+echo "======="
+echo "$green{SFTP service configured.}"
+echo "======="
+
+#logging action
+touch $logfile
+id=$(whoami) 
+echo "$timestamp SFTP configuration script run by $id." >> $logfile
 
