@@ -20,6 +20,7 @@ echo "This script will configure server to use SFTP service. Use for new servers
 echo -e
 echo "Checking if configuration is already in place..."
 
+#grepping for existing configuration. simple check, needs work.
 if grep -q "$conf" "$sshconf"; then
   echo "Configuration is in place or similar exists. Exiting."
   exit 1
