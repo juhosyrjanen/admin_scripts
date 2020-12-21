@@ -47,7 +47,7 @@ sleep 1
 echo "To revert configuration run following command manually: cp /etc/ssh/sshd_confif.bak /etc/ssh/sshd_config"
 echo -e
 sleep 1
-#Backup ends
+#Backup ends#
 
 #OS check starts
 distrocheck=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
