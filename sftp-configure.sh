@@ -1,7 +1,7 @@
 ##!/bin/bash
 #juho@syrjanen.org
 
-logfile="/var/log/valtti-sftp.log"
+logfile="/var/log/sftp.log"
 timestamp=`date "+%Y-%m-%d %H:%M:%S"`
 sshconf=/etc/ssh/sshd_config
 conf=sftpuser
